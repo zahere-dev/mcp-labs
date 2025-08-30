@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 from typing import Optional
 from mcp import ClientSession
 from mcp.client.sse import sse_client
@@ -23,21 +24,27 @@ async def _patched_request(self, method, url, *args, **kwargs):
 
 httpx.AsyncClient.request = _patched_request
 def llm_client(message: str):
-    client = OpenAI()
+    try:
+        client = OpenAI(base_url='https://genai-api-dev.dell.com/v1',http_client=httpx.Client(verify=False),
+    api_key=os.environ["DEV_GENAI_API_KEY"])
 
-    completion = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "You are an intelligent Assistant. You will execute tasks as instructed"},
-            {
-                "role": "user",
-                "content": message,
-            },
-        ],
-    )
+        completion = client.chat.completions.create(
+            model="llama-3-1-8b-instruct",
+            messages=[
+                {"role": "system", "content": "You are an intelligent Assistant. You will execute tasks as instructed"},
+                {
+                    "role": "user",
+                    "content": message,
+                },
+            ],
+        )
+        
+        print(completion)
 
-    result = completion.choices[0].message.content
-    return result
+        result = completion.choices[0].message.content
+        return result
+    except Exception as e:
+        logger.exception(e)
 
 
 
