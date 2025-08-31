@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/zahere-dev-mcp-labs-badge.png)](https://mseep.ai/app/zahere-dev-mcp-labs)
+
 # 🧠 OpenAI MCP BMI Tool – Client & Server Demo
 
 This project demonstrates how to build a simple MCP (Model Context Protocol) client and server using OpenAI's `openai` Python SDK and the `mcp` package. We expose a BMI calculator tool via the server and use an LLM-powered client to discover and invoke the tool based on natural language queries.
