@@ -77,13 +77,18 @@ def get_token():
 
 
 async def main(queries: list[str]):
-    sse_url = "http://localhost:8100/sse"    
-    auth_token = get_token()    
-    headers = {"Authorization": f"Bearer 12134"}    
+    sse_url = "http://localhost:8100/sse"
+    logger.info(f"Generating Bearer token for authentication")
+    auth_token = get_token()
+    #auth_token = "12124234"
+    logger.info(f"Token generated {auth_token[:20]} ")
+    headers = {"Authorization": f"Bearer {auth_token}"}    
     try:
+        logger.info("Connecting to MCP Server with token")
         # 1) Open SSE → yields (in_stream, out_stream)
         async with sse_client(url=sse_url, headers=headers) as (in_stream, out_stream):
             # 2) Create an MCP session over those streams
+            logger.info("Connected to MCP Server")
             async with ClientSession(in_stream, out_stream) as session:
                 
                 # 3) Initialize
@@ -109,7 +114,7 @@ async def main(queries: list[str]):
                     result = await session.call_tool(tool_call["tool"], arguments=tool_call["arguments"])
                     logger.success(f"User query: {query}, Tool Response: {result.content[0].text}")
     except httpx.HTTPStatusError as http_e:
-        logger.exception(f"HTTP Error: {e}")
+        logger.exception(f"HTTP Error: {http_e}")
     except Exception as e:
         logger.exception(f"Error: {e}")
             

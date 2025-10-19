@@ -1,5 +1,6 @@
-mcp[cli]
+--trusted-host pypi.python.org
 openai
+mcp
 fastapi
 python-dotenv
 loguru # or use logging

@@ -2,11 +2,12 @@ import datetime
 import logging
 import os
 from zoneinfo import ZoneInfo
-from fastapi import FastAPI, Depends, HTTPException, Request
+from fastapi import FastAPI, Depends, HTTPException, Request, Response
 from fastapi.responses import JSONResponse, StreamingResponse
 
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
+import httpx
 import jwt
 from jwt.algorithms import RSAAlgorithm
 import requests
@@ -110,6 +111,7 @@ def auth_asgi_wrapper(asgi_app):
     - If the JWT is valid, the request is forwarded to the wrapped ASGI app.
     """
 
+    print(asgi_app)
     async def app(scope, receive, send):
         """
         ASGI entry point function. Every incoming request (HTTP, WebSocket, lifespan, etc.)
@@ -155,21 +157,25 @@ def health():
 
 @app.get("/sse")
 async def handle_sse(request: Request):
-    
-    auth_hdr = request.headers.get("authorization")
-    token = None
-    if auth_hdr and auth_hdr.lower().startswith("bearer "):
-        token = auth_hdr.split(" ", 1)[1]
-    else:
-        token = request.query_params.get("access_token")
+    try:
+        auth_hdr = request.headers.get("authorization")
+        token = None
+        if auth_hdr and auth_hdr.lower().startswith("bearer "):
+            token = auth_hdr.split(" ", 1)[1]
+        else:
+            token = request.query_params.get("access_token")
 
-    if not token:
-        raise HTTPException(status_code=401, detail="Missing token")
-    
-    verify_jwt(token)
-    
-    async with transport.connect_sse(request.scope, request.receive, request._send) as (in_stream, out_stream):
-        await mcp._mcp_server.run(in_stream, out_stream, mcp._mcp_server.create_initialization_options())
+        if not token:
+            raise HTTPException(status_code=401, detail="Missing token")
+        
+        verify_jwt(token)
+        
+        async with transport.connect_sse(request.scope, request.receive, request._send) as (in_stream, out_stream):
+            await mcp._mcp_server.run(in_stream, out_stream, mcp._mcp_server.create_initialization_options())
+    except Exception as httpx_e:
+        logger.error(f"Error while validating token. {httpx_e}")
+        return Response(status_code=401,content="Invalid or expired token")
+        
 
 # mount the POST handler (ASGI app) but wrap it so it requires auth
 app.mount("/messages/", auth_asgi_wrapper(transport.handle_post_message))
