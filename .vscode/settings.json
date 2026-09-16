@@ -1,0 +1,3 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/progressive_tool_discovery/.venv/bin/python"
+}

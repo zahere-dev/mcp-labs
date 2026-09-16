@@ -1,0 +1,43 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Progressive Discovery: MCP Server",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/progressive_tool_discovery/server.py",
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/progressive_tool_discovery/.venv/bin/python",
+            "cwd": "${workspaceFolder}/progressive_tool_discovery"
+        },
+        {
+            "name": "Progressive Discovery: Client (keyword search)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/progressive_tool_discovery/client_with_keyword_search.py",
+            "args": ["search for the contact jane, and if she doesn't exist create one"],
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/progressive_tool_discovery/.venv/bin/python",
+            "cwd": "${workspaceFolder}/progressive_tool_discovery"
+        },
+        {
+            "name": "Progressive Discovery: Client (embeddings search)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/progressive_tool_discovery/client_with_embeddings_search.py",
+            "args": ["reach out to the customer about their open ticket"],
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/progressive_tool_discovery/.venv/bin/python",
+            "cwd": "${workspaceFolder}/progressive_tool_discovery"
+        },
+        {
+            "name": "Progressive Discovery: Client (LangChain)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/progressive_tool_discovery/client_langchain.py",
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/progressive_tool_discovery/.venv/bin/python",
+            "cwd": "${workspaceFolder}/progressive_tool_discovery"
+        }
+    ]
+}

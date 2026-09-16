@@ -1,0 +1,9 @@
+mcp[cli]<2
+openai
+chromadb
+langchain
+langchain-openai
+langchain-mcp-adapters
+loguru
+python-dotenv
+httpx

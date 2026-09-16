@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "MCP Server (streamable-http)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/server.py",
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/.venv/bin/python",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Client (keyword search)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/client_with_keyword_search.py",
+            "args": ["search for the contact jane, and if she doesn't exist create one"],
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/.venv/bin/python",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Client (embeddings search)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/client_with_embeddings_search.py",
+            "args": ["reach out to the customer about their open ticket"],
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/.venv/bin/python",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
